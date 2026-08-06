@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>麒麟激活注册机</title>
+<style>
+body{background:#111;color:#fff;text-align:center;padding:40px;font-size:18px}
+input{width:90%;height:50px;font-size:22px;text-align:center}
+button{width:90%;height:55px;font-size:20px;background:#07c;color:#fff;border:none}
+#res{font-size:36px;color:#0f0;margin-top:20px}
+</style>
+
+<h3>输入8位机器码</h3>
+<input id="mc" maxlength="8"><br>
+<button onclick="go()">生成注册码</button>
+<div id="res">--------</div>
+
+<script>
+const SALT = "KY2025";
+async function sha256(s){
+  const e = new TextEncoder().encode(s);
+  const n = await crypto.subtle.digest("SHA-256",e);
+  return Array.from(new Uint8Array(n)).map(i=>i.toString(16).padStart(2,0)).join("");
+}
+async function go(){
+  let mc = document.getElementById("mc").value.trim();
+  let hash = await sha256(mc+SALT);
+  let num = hash.replace(/[^0-9]/g,'').substr(0,8);
+  document.getElementById("res").innerText = num;
+}
+</script>
+</html>
